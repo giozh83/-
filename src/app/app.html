@@ -1,0 +1,67 @@
+<!-- Dynamic Weather Background with animated weather conditions -->
+<app-weather-background [theme]="state.bgType()"></app-weather-background>
+
+<div class="min-h-screen flex flex-col justify-between relative z-10 text-slate-100 safe-top safe-bottom">
+  
+  <!-- Header Bar -->
+  <app-header></app-header>
+
+  <!-- Favorite Cities Bar -->
+  <app-favorite-bar></app-favorite-bar>
+
+  <!-- Main Content Body -->
+  <main class="flex-1 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-4 space-y-4 sm:space-y-6">
+    
+    <!-- Error Alert Box -->
+    @if (state.errorMessage(); as error) {
+      <div class="p-3.5 sm:p-4 rounded-2xl bg-rose-500/20 border border-rose-500/30 backdrop-blur-xl flex items-center justify-between text-rose-200 text-xs sm:text-sm animate-in fade-in">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-4 h-4 sm:w-5 sm:h-5 text-rose-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>{{ error }}</span>
+        </div>
+        <button (click)="reload()" class="px-2.5 py-1 bg-rose-500/30 hover:bg-rose-500/50 active:scale-95 rounded-xl text-xs font-semibold text-white transition-colors shrink-0 ml-2">
+          {{ state.translationService.t().tryAgain }}
+        </button>
+      </div>
+    }
+
+    <!-- Loading State Skeleton -->
+    @if (state.isLoading()) {
+      <div class="space-y-4 sm:space-y-6 animate-pulse">
+        <div class="h-56 sm:h-64 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"></div>
+        <div class="h-36 sm:h-40 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <div class="h-28 sm:h-32 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"></div>
+          <div class="h-28 sm:h-32 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"></div>
+          <div class="h-28 sm:h-32 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"></div>
+        </div>
+      </div>
+    } @else if (state.weatherData()) {
+
+      <!-- Selected city and current weather -->
+      <app-current-weather></app-current-weather>
+
+      <!-- Full-width detailed hourly forecast -->
+      <app-hourly-forecast></app-hourly-forecast>
+
+      <!-- Remaining weather dashboard sections -->
+      <div class="space-y-4 sm:space-y-6">
+          
+          <!-- Key Weather Metrics Grid -->
+          <app-weather-details></app-weather-details>
+
+          <!-- Air Quality Section -->
+          <app-air-quality></app-air-quality>
+
+      </div>
+
+    }
+
+  </main>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
+</div>
